@@ -1,0 +1,18 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+  <h2>Welcome, {{ user.email }}</h2>
+  <a href="{% url 'designs:upload_design' %}">Upload a new design</a>
+
+  <h3>Your Designs</h3>
+  <ul>
+    {% for design in designs %}
+      <li>
+        <strong>{{ design.title }}</strong> - {{ design.uploaded_at }}<br>
+        {{ design.description }}<br>
+        <a href="{{ design.design_file.url }}">Download</a>
+      </li>
+    {% empty %}
+      <li>No designs uploaded yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

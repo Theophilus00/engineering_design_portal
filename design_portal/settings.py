@@ -108,8 +108,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 LOGIN_REDIRECT_URL = 'home'  # your home page url name
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'accounts:login'
 
 
 #from decouple import config

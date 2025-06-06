@@ -47,10 +47,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         messages.success(request, 'Your account has been activated. Please log in.')
-        return redirect('login')  # Make sure 'login' is the name of your login URL
+        return redirect('accounts:login')  # Make sure 'login' is the name of your login URL
     else:
         messages.error(request, 'Activation link is invalid or expired.')
-        return redirect('register')  # Redirect to signup or appropriate page
+        return redirect('accounts:register')  # Redirect to signup or appropriate page
 
 
 def user_login(request):
@@ -63,7 +63,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('home')  # Or 'home' if not namespaced
+                    return redirect('designs:dashboard')  # Or 'home' if not namespaced
                 else:
                     messages.error(request, 'Account inactive. Please verify your email.')
                     return redirect('resend_activation')
@@ -112,4 +112,4 @@ def resend_activation(request):
 def user_logout(request):
     logout(request)
     #messages.success(request, 'You have been logged out successfully.')
-    return redirect('login')  # Redirect to login page after logout
+    return redirect('accounts:login')  # Redirect to login page after logout

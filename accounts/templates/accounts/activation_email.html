@@ -2,4 +2,4 @@ Hi {{ user.email }},
 
 please confirm your email by clicking the link below:
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}

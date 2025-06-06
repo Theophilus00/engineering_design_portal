@@ -9,5 +9,5 @@
 {% for message in messages %}
 <p style="color: red;">{{ message }}</p>
 {% endfor %}
-<a href="{% url 'resend_activation' %}">Resend activation email</a>
+<a href="{% url 'accounts:resend_activation' %}">Resend activation email</a>
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form>
+{% for message in messages %}
+<p style="color: red;">{{ message }}</p>
+{% endfor %}
+<a href="{% url 'resend_activation' %}">Resend activation email</a>
+{% endblock %}

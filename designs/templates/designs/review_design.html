@@ -1,0 +1,20 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+  <h2>Review Design: {{ design.title }}</h2>
+
+  <p><strong>Uploaded By:</strong> {{ design.user.email }}</p>
+  <p><strong>Description:</strong> {{ design.description }}</p>
+  <p><strong>Download Design:</strong> <a href="{{ design.design_file.url }}" download>Download File</a></p>
+  <p><strong>Uploaded At:</strong> {{ design.uploaded_at|date:"M d, Y H:i" }}</p>
+
+  <hr>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Submit Review</button>
+  </form>
+
+  <p><a href="{% url 'designs:reviewer_dashboard' %}">Back to Dashboard</a></p>
+{% endblock %}

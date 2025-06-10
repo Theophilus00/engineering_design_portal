@@ -1,18 +1,76 @@
 {% extends 'accounts/base.html' %}
-{% block content %}
-  <h2>Welcome, {{ user.email }}</h2>
-  <a href="{% url 'designs:upload_design' %}">Upload a new design</a>
 
-  <h3>Your Designs</h3>
-  <ul>
-    {% for design in designs %}
-      <li>
-        <strong>{{ design.title }}</strong> - {{ design.uploaded_at }}<br>
-        {{ design.description }}<br>
-        <a href="{{ design.design_file.url }}">Download</a>
-      </li>
-    {% empty %}
-      <li>No designs uploaded yet.</li>
-    {% endfor %}
-  </ul>
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Welcome, {{ request.user.email }}</h2>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Your Uploaded Designs</h4>
+    <a href="{% url 'designs:upload_design' %}" class="btn btn-success">Upload New Design</a>
+  </div>
+
+  {% if designs %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>File</th>
+            <th>Uploaded On</th>
+            <th>Status</th>
+            <th>Reviewer</th>
+            <th>Feedback</th>
+            <th>Reviewed At</th>
+            <th>Review PDF</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for design in designs %}
+          <tr>
+            <td>{{ design.title }}</td>
+            <td>{{ design.description|default:"No description" }}</td>
+            <td>
+              <a href="{{ design.design_file.url }}" class="btn btn-sm btn-outline-primary" download>Download</a>
+            </td>
+            <td>{{ design.uploaded_at|date:"M d, Y H:i" }}</td>
+            <td>
+              {% if design.status == "pending" %}
+                <span class="badge bg-warning text-dark">Pending</span>
+              {% elif design.status == "approved" %}
+                <span class="badge bg-success">Approved</span>
+              {% elif design.status == "rejected" %}
+                <span class="badge bg-danger">Rejected</span>
+              {% endif %}
+            </td>
+            <td>{{ design.reviewer.email|default:"N/A" }}</td>
+            <td>{{ design.review_feedback|default:"No feedback yet" }}</td>
+            <td>
+              {% if design.review_at %}
+                {{ design.review_at|date:"M d, Y H:i" }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>
+              {% if design.review_feedback %}
+                <a href="{% url 'designs:review_feedback_pdf' design.pk %}" class="btn btn-sm btn-outline-secondary">
+                  Download PDF
+                </a>
+              {% else %}
+                <span class="text-muted">Not available</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      You haven't uploaded any designs yet. 
+      <a href="{% url 'designs:upload_design' %}" class="alert-link">Upload one now.</a>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}

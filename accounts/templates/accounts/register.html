@@ -1,9 +1,32 @@
 {% extends "accounts/base.html" %}
 {% block content %}
-<h2>Register</h2>
-<form method="POST" action="{% url 'accounts:register' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm mt-4">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4">Create Your Account</h3>
+
+        <form method="POST" action="{% url 'accounts:register' %}" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="mb-3">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-danger small">{{ field.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-success w-100">Register</button>
+        </form>
+
+        <div class="mt-3 text-center">
+          <span class="text-muted">Already have an account?</span>
+          <a href="{% url 'accounts:login' %}" class="text-decoration-none">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

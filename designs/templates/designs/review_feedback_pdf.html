@@ -1,0 +1,18 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+  <h2>Review: {{ design.title }}</h2>
+
+  <p><strong>Description:</strong> {{ design.description }}</p>
+  <p><strong>Uploaded by:</strong> {{ design.user.email }}</p>
+  <p><strong>File:</strong> <a href="{{ design.design_file.url }}" download>Download</a></p>
+
+  <form method="post">
+    {% csrf_token %}
+    <label>Feedback:</label><br>
+    <textarea name="feedback" rows="5" cols="50" required></textarea><br><br>
+
+    <button type="submit" name="action" value="A">Approve</button>
+    <button type="submit" name="action" value="R">Reject</button>
+  </form>
+{% endblock %}

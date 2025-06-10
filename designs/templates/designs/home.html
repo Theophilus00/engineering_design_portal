@@ -1,7 +1,44 @@
-<!-- home.html -->
 {% extends "accounts/base.html" %}
+{% load static %}
 
 {% block content %}
-<h2>Welcome, {{ user.first_name }}!</h2>
-<p>This is your dashboard.</p>
+<div class="container mt-4">
+    <div class="card shadow-sm p-4 mb-4 bg-white">
+        <h2 class="mb-3">Welcome, {{ user.first_name|default:user.email }}!</h2>
+        <p class="lead text-muted">This is your personalized design dashboard.</p>
+
+        <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="{% url 'designs:upload_design' %}" class="btn btn-primary">
+                📤 Upload New Design
+            </a>
+            <a href="{% url 'designs:dashboard' %}" class="btn btn-outline-secondary">
+                📊 View Your Designs
+            </a>
+
+            {% if user.is_staff %}
+            <a href="{% url 'designs:reviewer_dashboard' %}" class="btn btn-warning">
+                🛠 Reviewer Dashboard
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Optional: Recent Design Summary -->
+    {% if recent_designs %}
+    <div class="card shadow-sm p-4">
+        <h4 class="mb-3">Your Recent Uploads</h4>
+        <ul class="list-group">
+            {% for design in recent_designs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ design.title }}</strong><br>
+                    <small class="text-muted">{{ design.uploaded_at|date:"M d, Y H:i" }}</small>
+                </div>
+                <a href="{{ design.design_file.url }}" class="btn btn-sm btn-outline-secondary" download>Download</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

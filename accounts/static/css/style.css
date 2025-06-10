@@ -1,0 +1,14 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+}
+
+table {
+    font-size: 0.95rem;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

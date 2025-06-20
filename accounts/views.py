@@ -30,6 +30,7 @@ def register(request):
                 'token': default_token_generator.make_token(user),
             })
             email = EmailMessage(subject, message, to=[user.email])
+            email.content_subtype = 'html'  # If you want to send HTML email
             email.send()
             return HttpResponse('Please check your email to confirm your account.')
     else:
@@ -40,17 +41,20 @@ def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = CustomUser.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist) as e:
         user = None
 
-    if user and default_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
-        messages.success(request, 'Your account has been activated. Please log in.')
-        return redirect('accounts:login')  # Make sure 'login' is the name of your login URL
+    if user is not None and default_token_generator.check_token(user, token):
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+            messages.success(request, '✅ Your account has been activated. You can now log in.')
+        else:
+            messages.info(request, '🔓 Your account is already active.')
+        return redirect('accounts:login')
     else:
-        messages.error(request, 'Activation link is invalid or expired.')
-        return redirect('accounts:register')  # Redirect to signup or appropriate page
+        messages.error(request, '⚠️ Activation link is invalid or has expired.')
+        return redirect('accounts:register')
 
 
 def user_login(request):
@@ -98,7 +102,7 @@ def resend_activation(request):
                     email_message = EmailMessage(subject, message, to=[user.email])
                     email_message.send()
                     messages.success(request, 'Activation email resent. Check your inbox.')
-                    return redirect('login')
+                    return redirect('accounts:login')
                 else:
                     messages.info(request, 'Account already active. Please log in.')
                     return redirect('login')

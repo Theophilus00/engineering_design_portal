@@ -1,5 +1,31 @@
-Hi {{ user.email }},
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Activate Your Account</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+  <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #333;">Welcome to Engineering Design Portal, {{ user.email }}</h2>
+    <p style="color: #555;">Thank you for registering. To complete your registration, please confirm your email address by clicking the button below:</p>
+    
+    <p style="text-align: center; margin: 30px 0;">
+      <a href="http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}"
+         style="background-color: #007BFF; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px;">
+        Activate My Account
+      </a>
+    </p>
 
-please confirm your email by clicking the link below:
+    <p style="color: #555;">If the button doesn’t work, you can also copy and paste this link into your browser:</p>
+    <p style="word-break: break-all; color: #888;">
+      http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+    </p>
 
-http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+    <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;" />
+
+    <p style="color: #999; font-size: 12px;">
+      If you didn’t create this account, please ignore this email.
+    </p>
+  </div>
+</body>
+</html>

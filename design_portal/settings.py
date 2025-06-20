@@ -77,8 +77,14 @@ WSGI_APPLICATION = 'design_portal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'engineering_portal_db',
+        'USER': 'postgres',
+        'PASSWORD': 'theophilus26',
+        'HOST': 'localhost',  # Set to 'localhost' or your database server address
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
@@ -116,11 +122,29 @@ LOGIN_REDIRECT_URL = 'home'  # your home page url name
 LOGOUT_REDIRECT_URL = 'accounts:login'
 
 
-#from decouple import config
+from decouple import config
+
+# Use SendGrid Email Backend
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+
+# SendGrid API Key
+SENDGRID_API_KEY = config("SENDGRID_API_KEY")
+
+# Default sender email
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
+# Optional: Dev settings
+SENDGRID_SANDBOX_MODE_IN_DEBUG = config("SENDGRID_SANDBOX_MODE_IN_DEBUG", default=False, cast=bool)
+SENDGRID_ECHO_TO_STDOUT = config("SENDGRID_ECHO_TO_STDOUT", default=False, cast=bool)
+#print("Loaded SendGrid API Key:", config("SENDGRID_API_KEY", default="NOT FOUND"))
+# SECURITY WARNING: don't run with debug turned on in production!
+
+
+
 
 # email settings
 # Email settings for development (print email to console)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #EMAIL_BACKEND = config('EMAIL_BACKEND')
 #EMAIL_HOST = config('EMAIL_HOST')

@@ -29,7 +29,7 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Convert string to boolean
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files in production
 ]
 
 ROOT_URLCONF = 'design_portal.urls'
@@ -120,7 +121,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = 'home'  # your home page url name
 LOGOUT_REDIRECT_URL = 'accounts:login'
@@ -143,19 +144,6 @@ SENDGRID_ECHO_TO_STDOUT = config("SENDGRID_ECHO_TO_STDOUT", default=False, cast=
 #print("Loaded SendGrid API Key:", config("SENDGRID_API_KEY", default="NOT FOUND"))
 # SECURITY WARNING: don't run with debug turned on in production!
 
-
-
-
-# email settings
-# Email settings for development (print email to console)
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-#EMAIL_BACKEND = config('EMAIL_BACKEND')
-#EMAIL_HOST = config('EMAIL_HOST')
-#EMAIL_PORT = config('EMAIL_PORT', cast=int)
-#EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-#EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-#EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
                        
 
 
@@ -175,6 +163,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Let WhiteNoise serve compressed static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

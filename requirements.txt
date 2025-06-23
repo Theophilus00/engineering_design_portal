@@ -29,7 +29,6 @@ PyYAML==6.0.2
 reportlab==4.4.1
 requests==2.32.3
 sendgrid==6.12.4
-sendgrid-django==4.2.0
 six==1.16.0
 sqlparse==0.4.4
 svglib==1.5.1
